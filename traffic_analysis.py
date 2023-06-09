@@ -1,0 +1,31 @@
+import numpy as np
+from matplotlib import pyplot as plt
+def plots(loc_ev):
+    Velocity_Array=np.zeros(len(loc_ev))
+    NC_Array=np.zeros(len(loc_ev))
+    Flux_Array=np.zeros(len(loc_ev))
+    for i in range(0,len(loc_ev)):
+        f_curr=np.loadtxt('v'+str(loc_ev[i])+'.txt')
+        NC_Array[i] = np.mean(f_curr[95:100, 0])
+        Velocity_Array[i] = np.mean(f_curr[95:100, 1])
+        Flux_Array[i]=np.mean(f_curr[95:100,2])
+        print(NC_Array[i],Velocity_Array[i],Flux_Array[i])
+    fig=plt.figure()
+    plt.plot(NC_Array /3000,Velocity_Array,'o')
+    plt.plot(NC_Array / 3000, Velocity_Array, color='k')
+    plt.xlabel('Плотность')
+    plt.ylabel('Скорость')
+    plt.tight_layout()
+    plt.savefig('dv_res.png',dpi=600)
+    #plt.show()
+
+    fig=plt.figure()
+    plt.plot(NC_Array / 3000,Flux_Array,'o',label='Моделирование движения')
+    plt.plot(NC_Array / 3000, Flux_Array, color='k')
+    plt.plot(loc_ev/3000,loc_ev*Velocity_Array[0],'r--',label='Линейная зависимость')
+    plt.ylim(0,2800)
+    plt.legend()
+    plt.xlabel('Плотность')
+    plt.ylabel('Поток')
+    plt.tight_layout()
+    plt.savefig('df_res.png', dpi=600)
